@@ -1,5 +1,7 @@
 package com.stripe.android;
 
+import android.support.annotation.NonNull;
+
 import com.stripe.android.exception.AuthenticationException;
 import com.stripe.android.exception.InvalidRequestException;
 import com.stripe.android.exception.StripeException;
@@ -111,7 +113,8 @@ public class StripeApiHandlerTest {
 
     @Test
     public void getHeaders_withOnlyRequiredOptions_doesNotAddEmptyOptions() {
-        RequestOptions requestOptions = RequestOptions.builder("some_key").build();
+        final RequestOptions requestOptions = RequestOptions.builder("some_key")
+                .build();
         Map<String, String> headerMap = StripeApiHandler.getHeaders(requestOptions);
 
         assertNotNull(headerMap);
@@ -258,6 +261,7 @@ public class StripeApiHandlerTest {
             assertNotNull(response.getResponseHeaders());
             assertTrue(response.getResponseHeaders().containsKey("Stripe-Account"));
             List<String> accounts = response.getResponseHeaders().get("Stripe-Account");
+            assertNotNull(accounts);
             assertEquals(1, accounts.size());
             assertEquals(connectAccountId, accounts.get(0));
         } catch (AuthenticationException authEx) {
@@ -334,7 +338,6 @@ public class StripeApiHandlerTest {
                     clientSecret
             );
             PaymentIntent paymentIntent = StripeApiHandler.retrievePaymentIntent(
-                    null,
                     ApplicationProvider.getApplicationContext(),
                     paymentIntentParams,
                     publicKey,
@@ -381,15 +384,15 @@ public class StripeApiHandlerTest {
         StripeResponse mStripeResponse;
 
         @Override
-        public void onStripeResponse(StripeResponse response) {
+        public void onStripeResponse(@NonNull StripeResponse response) {
             mStripeResponse = response;
         }
     }
 
     private static class TestLoggingListener implements StripeApiHandler.LoggingResponseListener {
-        boolean mShouldLogTest;
-        StripeResponse mStripeResponse;
-        StripeException mStripeException;
+        private boolean mShouldLogTest;
+        private StripeResponse mStripeResponse;
+        private StripeException mStripeException;
 
         TestLoggingListener(boolean shouldLogTest) {
             mShouldLogTest = shouldLogTest;

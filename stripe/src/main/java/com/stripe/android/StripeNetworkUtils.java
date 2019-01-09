@@ -38,11 +38,10 @@ public class StripeNetworkUtils {
     }
 
     @NonNull
-    static Map<String, Object> hashMapFromPersonalId(@NonNull Context context,
-                                                            @NonNull String personalId) {
-        Map<String, Object> tokenParams = new HashMap<>();
+    static Map<String, Object> hashMapFromPersonalId(@NonNull String personalId) {
+        final Map<String, Object> tokenParams = new HashMap<>();
         tokenParams.put("personal_id_number", personalId);
-        Map<String, Object> piiParams = new HashMap<>();
+        final Map<String, Object> piiParams = new HashMap<>();
         piiParams.put(Token.TYPE_PII, tokenParams);
         return piiParams;
     }
@@ -90,7 +89,7 @@ public class StripeNetworkUtils {
      */
     @NonNull
     static Map<String, Object> hashMapFromBankAccount(@NonNull Context context,
-                                                             @NonNull BankAccount bankAccount) {
+                                                      @NonNull BankAccount bankAccount) {
         return hashMapFromBankAccount(null, context, bankAccount);
     }
 
